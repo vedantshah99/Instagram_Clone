@@ -5,7 +5,7 @@ import {PaperAirplaneIcon,PlusCircleIcon, HeartIcon} from "@heroicons/react/outl
 
 function Header() {
   return (
-    <div>
+    <div className='shadow-sm border-b bg-white sticky-top 0 z-50'>
         <div className='flex justify-between max-w-6xl mx-5 lg:mx-auto'>
           {/* Left Instagram Text Logo*/}
           <div className='relative hidden lg:inline-grid w-24 cursor-pointer'>
@@ -41,7 +41,11 @@ function Header() {
           <div className = 'flex items-center justify-end space-x-4'>
             <HomeIcon className='navBtn'/>
             <MenuIcon className='h-6 relative md:hidden cursor-pointer'/>
-            <PaperAirplaneIcon className='navBtn' />
+            <div className='relative nvaBtn'>
+              <PaperAirplaneIcon className='navBtn rotate-45' />
+              <div className = 'hidden md:inline-flex absolute -top-1 -right-1 text-xs w-5 h-5 bg-red-500 rounded-full justify-center animate-pulse text-white'>3</div>
+            </div>
+            
             <PlusCircleIcon className='navBtn' />
             <HeartIcon className='navBtn'/>
 
