@@ -2,20 +2,28 @@ import React from 'react'
 import Image from 'next/image'
 import {SearchIcon, HomeIcon, MenuIcon} from "@heroicons/react/solid"
 import {PaperAirplaneIcon,PlusCircleIcon, HeartIcon} from "@heroicons/react/outline"
+import { signIn,signOut,useSession } from 'next-auth/react'
+import {useRouter} from 'next/router'
+import { useRecoilState } from 'recoil'
+import {modalState} from '../atoms/modalAtom'
 
 function Header() {
+  const {data:session} = useSession()
+  const router = useRouter()
+  const [open, setOpen] = useRecoilState(modalState)
+
   return (
     <div className='shadow-sm border-b bg-white sticky-top 0 z-50'>
         <div className='flex justify-between max-w-6xl mx-5 lg:mx-auto'>
           {/* Left Instagram Text Logo*/}
-          <div className='relative hidden lg:inline-grid w-24 cursor-pointer'>
+          <div onClick={()=>router.push('/')} className='relative hidden lg:inline-grid w-24 cursor-pointer'>
               <Image
                 src = 'https://logos-download.com/wp-content/uploads/2016/03/Instagram_Logo_2016.png'
                 layout ="fill"
                 objectFit='contain'
               />
           </div>
-          <div className='relative lg:hidden w-10 flex-shrink-0 cursor-pointer'>
+          <div onClick={()=>router.push('/')} className='relative lg:hidden w-10 flex-shrink-0 cursor-pointer'>
               <Image
                 src = 'https://image.similarpng.com/very-thumbnail/2020/05/Icon-Instagram-PNG.png'
                 layout ="fill"
@@ -39,19 +47,25 @@ function Header() {
 
           {/* Icons */}
           <div className = 'flex items-center justify-end space-x-4'>
-            <HomeIcon className='navBtn'/>
+            <HomeIcon onClick={()=>router.push('/')} className='navBtn'/>
             <MenuIcon className='h-6 relative md:hidden cursor-pointer'/>
-            <div className='relative nvaBtn'>
-              <PaperAirplaneIcon className='navBtn rotate-45' />
-              <div className = 'hidden md:inline-flex absolute -top-1 -right-1 text-xs w-5 h-5 bg-red-500 rounded-full justify-center animate-pulse text-white'>3</div>
-            </div>
+            {session ? (
+              <>
+              <div className='relative navBtn'>
+                <PaperAirplaneIcon className='navBtn rotate-45' />
+                <div className = 'hidden md:inline-flex absolute -top-1 -right-1 text-xs w-5 h-5 bg-red-500 rounded-full justify-center animate-pulse text-white'>3</div>
+              </div>
+              
+              <PlusCircleIcon onClick={() => setOpen(true)} className='navBtn' />
+              <HeartIcon className='navBtn'/>
+
+              <img onClick={signOut} src = {session.user?.image} 
+              alt ='profile pic' className='h-10 w-10 rounded-full cursor-pointer'/>
+              </>
+            ): (
+              <button onClick={signIn}>Sign In</button>
+            )}
             
-            <PlusCircleIcon className='navBtn' />
-            <HeartIcon className='navBtn'/>
-
-            <img src = "https://media-exp1.licdn.com/dms/image/C5603AQFrkI6Ht9ifoQ/profile-displayphoto-shrink_200_200/0/1661814333142?e=1667433600&v=beta&t=4zCREXf9XS96CU3MzkwpNRz_0pOrMIZsCEucMGEGOHw"
-            alt ='profile pic' className='h-10 rounded-full cursor-pointer'/>
-
           </div>
           
         </div>      
