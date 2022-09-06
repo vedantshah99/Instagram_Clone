@@ -33,7 +33,6 @@ function Modal() {
             timestamp: serverTimestamp()
         })
 
-        console.log("New doc with ID ", docRef.id)
         const imageRef = ref(storage, 'posts/'+docRef.id+'/image')
 
         await uploadString(imageRef, selectedFile, 'data_url').then(async (snaphot)=>{

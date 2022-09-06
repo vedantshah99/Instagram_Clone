@@ -21,8 +21,6 @@ function Posts() {
             setPosts(snapshot.docs)
         })
     ,[db])
-
-    console.log(POSTS)
     
   return (
     <div>
