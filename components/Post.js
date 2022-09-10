@@ -13,6 +13,7 @@ import { useSession } from 'next-auth/react'
 import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, setDoc, doc, deleteDoc} from '@firebase/firestore'
 import {db} from '../firebase'
 import Moment from 'react-moment'
+import {useRouter} from 'next/router'
 
 function Post({key,id,username,userImg, img, caption}) {
     const {data:session} = useSession()
@@ -20,6 +21,7 @@ function Post({key,id,username,userImg, img, caption}) {
     const [comments, setComments] = useState()
     const [likes, setLikes] = useState()
     const [hasLiked, setHasLiked] = useState(false)
+    const router = useRouter()
 
     useEffect(
         ()=> 
@@ -76,7 +78,7 @@ function Post({key,id,username,userImg, img, caption}) {
     <div className='bg-white my-7 border rounded-md'>
         {/* Post Header */}
         <div className='flex items-center p-5'>
-            <img src={userImg} className='rounded-full h-12 w-12 border p-1 mr-3' alt=''/>
+            <img src={userImg} onClick={()=>router.push('/messenger/'+username)} className='rounded-full h-12 w-12 border p-1 mr-3' alt=''/>
             <p className='flex-1 font-bold'> {username}</p>
             <DotsHorizontalIcon className='h-5' />
         </div>
