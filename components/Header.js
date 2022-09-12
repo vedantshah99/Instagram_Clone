@@ -52,7 +52,7 @@ function Header() {
             {session ? (
               <>
               <div className='relative navBtn'>
-                <PaperAirplaneIcon className='navBtn rotate-45' />
+                <PaperAirplaneIcon className='navBtn rotate-45' onClick={() => router.push('/emptyChat')}/>
                 <div className = 'hidden md:inline-flex absolute -top-1 -right-1 text-xs w-5 h-5 bg-red-500 rounded-full justify-center animate-pulse text-white'>3</div>
               </div>
               
