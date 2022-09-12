@@ -3,14 +3,30 @@ import Image from 'next/image'
 import {SearchIcon, HomeIcon, MenuIcon} from "@heroicons/react/solid"
 import {PaperAirplaneIcon,PlusCircleIcon, HeartIcon} from "@heroicons/react/outline"
 import { signIn,signOut,useSession } from 'next-auth/react'
+import { useEffect} from 'react'
 import {useRouter} from 'next/router'
 import { useRecoilState } from 'recoil'
 import {modalState} from '../atoms/modalAtom'
+import {db} from '../firebase'
+import { query, orderBy, where,snapshot, onSnapshot, getDocs, setDoc, addDoc, useCollection, collection, doc, serverTimestamp} from '@firebase/firestore'
 
 function Header() {
   const {data:session} = useSession()
   const router = useRouter()
   const [open, setOpen] = useRecoilState(modalState)
+
+  useEffect(() => {
+    if (session){
+      setDoc(doc(db, 'users',session.user.uid),{
+        username: session.user.username,
+        lastSeen: serverTimestamp(),
+        userPic: session.user.image
+      },
+      {merge: true}
+      )
+    }
+    
+  }, [session])
 
   return (
     <div className='shadow-sm border-b bg-white sticky-top 0 z-50'>

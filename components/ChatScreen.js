@@ -62,6 +62,7 @@ function ChatScreen({chat, messages}) {
     setDoc(doc(db, 'users',session.user.uid),{
       username: session.user.username,
       lastSeen: serverTimestamp(),
+      userPic: session.user.image
     },
     {merge: true}
     )

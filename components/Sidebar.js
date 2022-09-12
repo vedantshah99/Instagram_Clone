@@ -12,7 +12,7 @@ import Chat from './Chat'
 function Sidebar({recipient}) {
   const {data:session} = useSession()
   const [userChats, setUserChats] = useState([])
-
+  
   useEffect(() => onSnapshot(query(collection(db, 'chats'), where('users', 'array-contains', session?.user?.username)), snapshot=>{
         setUserChats(snapshot.docs)
       })
