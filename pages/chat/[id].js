@@ -7,22 +7,26 @@ import { query, orderBy,getDoc, getDocs, addDoc, collection, doc} from '@firebas
 import {db} from '../../firebase'
 import getRecipientUser from '../../utility/getRecipientUser'
 import {useSession} from 'next-auth/react'
+import Header from '../../components/Header' 
 
 function Chat({chat, messages}) {
     const {data:session} = useSession()
 
   return (
-    <Container>
+    <>
         <Head>
             <title>
                 Chat with {getRecipientUser(chat.users, session?.user?.username)}
             </title>
         </Head>
-        <Sidebar />
-        <ChatContainer>
-            <ChatScreen chat = {chat} messages = {messages}/>
-        </ChatContainer>
-    </Container>
+        <Header />
+        <Container>
+            <Sidebar />
+            <ChatContainer>
+                <ChatScreen chat = {chat} messages = {messages}/>
+            </ChatContainer>
+        </Container>
+    </>
   )
 }
 
