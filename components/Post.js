@@ -10,7 +10,7 @@ import{
 import{HeartIcon as HeartIconFilled} 
 from "@heroicons/react/solid"
 import { useSession } from 'next-auth/react'
-import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, setDoc, doc, deleteDoc} from '@firebase/firestore'
+import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, setDoc, doc, where, deleteDoc} from '@firebase/firestore'
 import {db} from '../firebase'
 import Moment from 'react-moment'
 import {useRouter} from 'next/router'
@@ -22,7 +22,35 @@ function Post({key,id,username,userImg, img, caption}) {
     const [likes, setLikes] = useState()
     const [hasLiked, setHasLiked] = useState(false)
     const router = useRouter()
+    const [userChats, setUserChats] = useState([])
 
+    useEffect(() => onSnapshot(query(collection(db, 'chats'), where('users', 'array-contains', session?.user?.username)), snapshot=>{
+            setUserChats(snapshot.docs)
+        })
+    ,[db])
+
+    const createChat = async() =>{
+        const bool = chatAlreadyExists(username)
+        if (!bool) {
+        const q = query(collection(db, 'chats'))
+        const docRef = await addDoc(collection(db, 'chats'), {
+            users:[session.user.username, username]
+        })
+        router.push('/chat/'+docRef.id)
+        }
+    }
+
+    ////CHECKS IF CHAT ALREADY EXISTS
+    const chatAlreadyExists = (recipientUser) =>{
+        return(
+        !!userChats.find(
+            (chat)=>
+            chat.data().users.find((user) => user === recipientUser)?.length > 0
+            )
+        )
+    }
+
+    //// SNAPSHOT OF COMMENTS
     useEffect(
         ()=> 
             onSnapshot(
@@ -35,6 +63,7 @@ function Post({key,id,username,userImg, img, caption}) {
         [db]
     )
 
+    //// SNAPSHOT OF LIKES
     useEffect(
         () =>
             onSnapshot(collection(db,'posts', id, 'likes'), (snapshot)=>
@@ -43,12 +72,14 @@ function Post({key,id,username,userImg, img, caption}) {
         [db,id]
     )
 
+    ////SNAPSHOT OF HASLIKED
     useEffect(()=>
         setHasLiked(
             likes?.findIndex((like)=>like.id === session?.user?.uid) !== -1
         ),
     [likes])
 
+    //// ADJUSTS 'LIKES' COLLECTIONS IF USER UNLIKES OR LIKES
     const likePost = async () => {
         if (hasLiked) {
             await deleteDoc(doc(db, 'posts', id, 'likes', session.user.uid))
@@ -59,6 +90,7 @@ function Post({key,id,username,userImg, img, caption}) {
         }
     }
 
+    //// ADDS COMMENT TO FIREBASE
     const sendComment = async (e) => {
         e.preventDefault()
 
@@ -70,7 +102,6 @@ function Post({key,id,username,userImg, img, caption}) {
             username: session.user.username,
             userImage: session.user.image,
             timestamp: serverTimestamp()
-
         })
     }
 
@@ -78,7 +109,7 @@ function Post({key,id,username,userImg, img, caption}) {
     <div className='bg-white my-7 border rounded-md'>
         {/* Post Header */}
         <div className='flex items-center p-5'>
-            <img src={userImg} onClick={()=>router.push('/messenger/'+username)} className='rounded-full h-12 w-12 border p-1 mr-3' alt=''/>
+            <img src={userImg} onClick={createChat} className='rounded-full h-12 w-12 border p-1 mr-3' alt=''/>
             <p className='flex-1 font-bold'> {username}</p>
             <DotsHorizontalIcon className='h-5' />
         </div>

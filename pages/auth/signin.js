@@ -3,6 +3,7 @@ import {getProviders, signIn as signIntoProvider} from 'next-auth/react'
 import Header from '../../components/Header'
 //Running on Browser
 function signIn({providers}) {
+  
   return (
     <>
       <Header />

@@ -9,33 +9,14 @@ import {useSession} from 'next-auth/react'
 import {db} from '../firebase'
 import Chat from './Chat'
 
-function Sidebar({recipient}) {
+function Sidebar() {
   const {data:session} = useSession()
   const [userChats, setUserChats] = useState([])
 
   useEffect(() => onSnapshot(query(collection(db, 'chats'), where('users', 'array-contains', session?.user?.username)), snapshot=>{
-        setUserChats(snapshot.docs)
+          setUserChats(snapshot.docs)
       })
   ,[db])
-
-  const createChat = async() =>{
-    const bool = chatAlreadyExists(recipient)
-    if (!bool) {
-      const q = query(collection(db, 'chats'))
-      await addDoc(collection(db, 'chats'), {
-        users:[session.user.username, recipient]
-      })
-    }
-  }
-
-  const chatAlreadyExists = (recipientUser) =>{
-    return(
-      !!userChats.find(
-        (chat)=>
-          chat.data().users.find((user) => user === recipientUser)?.length > 0
-        )
-    )
-  }
   
   return (
     <Container>
@@ -56,7 +37,7 @@ function Sidebar({recipient}) {
         <SearchInput placeholder='Seach in Chats'/>
       </Search>
 
-      <SidebarButton onClick={createChat}>
+      <SidebarButton>
         Start new chat
       </SidebarButton>
 

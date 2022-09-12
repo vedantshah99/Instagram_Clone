@@ -62,6 +62,7 @@ function ChatScreen({chat, messages}) {
     setDoc(doc(db, 'users',session.user.uid),{
       username: session.user.username,
       lastSeen: serverTimestamp(),
+      userPic: session.user.image,
     },
     {merge: true}
     )
@@ -83,7 +84,11 @@ function ChatScreen({chat, messages}) {
   return (
     <Container>
         <Header>
-          <Avatar />
+          {recipient ? (
+            <Avatar src={recipient?.userPic}/>
+          ) : (
+            <Avatar />
+          )} 
 
           <HeaderInformation>
             <h3>{recipientUser}</h3>

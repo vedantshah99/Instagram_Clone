@@ -12,6 +12,17 @@ function Header() {
   const router = useRouter()
   const [open, setOpen] = useRecoilState(modalState)
 
+  // const sendMessage = (e) => {
+  //   e.preventDefault()
+  //   setDoc(doc(db, 'users',session.user.uid),{
+  //       username: session.user.username,
+  //       lastSeen: serverTimestamp(),
+  //       userPic: session.user.image,
+  //     },
+  //     {merge: true}
+  //   )
+  // }
+
   return (
     <div className='shadow-sm border-b bg-white sticky-top 0 z-50'>
         <div className='flex justify-between max-w-6xl mx-5 lg:mx-auto'>
@@ -52,11 +63,11 @@ function Header() {
             {session ? (
               <>
               <div className='relative navBtn'>
-                <PaperAirplaneIcon className='navBtn rotate-45' />
+                <PaperAirplaneIcon className='navBtn rotate-45' onClick = {() => router.push('/emptyChat')}/>
                 <div className = 'hidden md:inline-flex absolute -top-1 -right-1 text-xs w-5 h-5 bg-red-500 rounded-full justify-center animate-pulse text-white'>3</div>
               </div>
               
-              <PlusCircleIcon onClick={() => setOpen(true)} className='navBtn' />
+              <PlusCircleIcon onClick={() => setOpen(true)} className='navBtn' />s
               <HeartIcon className='navBtn'/>
 
               <img onClick={signOut} src = {session.user?.image} 
