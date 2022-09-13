@@ -1,11 +1,10 @@
 import styled from 'styled-components'
-import { useState , useEffect} from 'react'
+import { useState , useEffect, useRef} from 'react'
 import {useSession} from 'next-auth/react'
 import { useRouter} from 'next/router'
 import { Avatar } from '@mui/material'
 import {AttachFile, MoreVert as MoreVertIcon, InsertEmoticon, MicOutlined} from '@mui/icons-material'
 import { query, orderBy, where,snapshot, onSnapshot, getDocs, setDoc, addDoc, useCollection, collection, doc, serverTimestamp} from '@firebase/firestore'
-import {set, ref} from '@firebase/database'
 import {db} from '../firebase'
 import Message from './Message'
 import getRecipientUser from '../utility/getRecipientUser'
@@ -17,6 +16,7 @@ function ChatScreen({chat, messages}) {
   const router = useRouter()
   const [messagesSnapshot, setMessagesSnapshot] = useState([])
   const [recipientSnapshot, setRecipientSnapshot] = useState([])
+  const EndOfMessagesRef = useRef(null)
 
   useEffect(() => onSnapshot(query(collection(db, 'chats', router.query.id, 'messages'),
     orderBy('timestamp', 'asc')), snapshot =>{
@@ -26,17 +26,19 @@ function ChatScreen({chat, messages}) {
 
   useEffect(() => onSnapshot(query(collection(db,'users'),where('username', '==',getRecipientUser(chat.users, session.user.username))), snapshot => {
     setRecipientSnapshot(snapshot)
-  }), [db]
+  }), [router.query.id]
   )
 
   // const messagesSnapshot = onSnapshot(query(
   //     collection(db, "chats", router.query.id, 'messages'),
   //     orderBy('timestamp', 'asc')
   //   ))
-  
-
-  console.log(router.query.id)
-  console.log(messagesSnapshot.docs)
+  const scrollToBottom = () => {
+    EndOfMessagesRef.current.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+  }
 
   const showMessages = () => {
     if (messagesSnapshot) {
@@ -75,7 +77,7 @@ function ChatScreen({chat, messages}) {
     })
 
     setInput('')
-
+    scrollToBottom()
   }
 
   const recipient = recipientSnapshot?.docs?.[0]?.data()
@@ -84,7 +86,11 @@ function ChatScreen({chat, messages}) {
   return (
     <Container>
         <Header>
-          <Avatar />
+          {recipient ? (
+            <UserAvatar src={recipient?.userPic}/>
+          ) : (
+            <UserAvatar />
+          )}
 
           <HeaderInformation>
             <h3>{recipientUser}</h3>
@@ -111,9 +117,9 @@ function ChatScreen({chat, messages}) {
           </HeaderIcons>
         </Header>
 
-        <MessageContainer>
+        <MessageContainer >
           {showMessages()}
-          <EndOfMessage/>
+          <EndOfMessage ref ={EndOfMessagesRef}/>
         </MessageContainer>
 
         <InputContainer>
@@ -186,4 +192,11 @@ background-color: #e5ded8;
 min-height: 90vh;
 `
 
-const EndOfMessage = styled.div``
+const EndOfMessage = styled.div`
+margin-bottom: 60px;
+`
+
+const UserAvatar = styled(Avatar)`
+margin:5px;
+margin-right: 15px;
+`

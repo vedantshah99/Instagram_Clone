@@ -38,10 +38,9 @@ function Sidebar({recipient}) {
   }
   
   return (
-    <Container>
+    <Container className='scrollbar-hide'>
       <Header>
-        <UserAvatar />
-
+        <p>Direct Messages</p>
         <IconContainer>
           <IconButton>
             <ChatIcon />

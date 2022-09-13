@@ -7,17 +7,17 @@ import Modal from '../components/Modal'
 
 const Home: NextPage = () => {
   return (
-    <div className="bg-gray-50 h-screen overflow-y-scroll scrollbar-hide ">
+    <div className="overflow-y-scroll scrollbar-hide bg-gray-50 h-screen ">
       <Head>
         <title>Vedantstagram</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       {/*Header*/}
-      <Header />
+      <Header/>
 
       {/*Feed*/}
-      <Feed />
+      <Feed/>
 
       {/*Modal*/}
       <Modal />
