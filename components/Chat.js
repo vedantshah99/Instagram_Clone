@@ -4,18 +4,34 @@ import { Avatar} from '@mui/material'
 import getRecipientUser from '../utility/getRecipientUser'
 import {useSession} from 'next-auth/react'
 import {useRouter} from 'next/router'
+import { useState , useEffect} from 'react'
+import {db} from '../firebase'
+import { query, orderBy, where,snapshot, onSnapshot, collection} from '@firebase/firestore'
 
 function Chat({id, users}) {
     const {data:session} = useSession()
     const router = useRouter()
     const recipientUser = getRecipientUser(users, session.user.username)
-    const enterChat = () => {
+    const [recipientSnapshot, setRecipientSnapshot] = useState([])
+
+    useEffect(() => onSnapshot(query(collection(db,'users'),where('username', '==',getRecipientUser(users, session.user.username))), snapshot => {
+      setRecipientSnapshot(snapshot)
+    }), [db]
+    )
+
+    const recipient = recipientSnapshot?.docs?.[0]?.data()
+
+    const enterChat = () => { 
         router.push('/chat/'+id)
     }
 
   return (
     <Container onClick={enterChat}>
-        <UserAvatar />
+        {recipient ? (
+          <UserAvatar src={recipient?.userPic}/>
+        ) : (
+          <UserAvatar />
+        )}
         <p>{recipientUser}</p>
     </Container>
   )
