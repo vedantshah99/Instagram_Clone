@@ -30,7 +30,8 @@ function Modal() {
             username: session.user.username,
             caption: captionRef.current.value,
             profileImg: session.user.image,
-            timestamp: serverTimestamp()
+            timestamp: serverTimestamp(),
+            userID: session.user.uid,
         })
 
         const imageRef = ref(storage, 'posts/'+docRef.id+'/image')

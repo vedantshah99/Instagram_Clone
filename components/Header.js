@@ -34,7 +34,7 @@ function Header() {
           {/* Left Instagram Text Logo*/}
           <div onClick={()=>router.push('/')} className='relative hidden lg:inline-grid w-24 cursor-pointer'>
               <Image
-                src = 'https://logos-download.com/wp-content/uploads/2016/03/Instagram_Logo_2016.png'
+                src = {'/res/vedantstagram_logo.jpg'}
                 layout ="fill"
                 objectFit='contain'
               />
@@ -64,7 +64,7 @@ function Header() {
           {/* Icons */}
           <div className = 'flex items-center justify-end space-x-4'>
             <HomeIcon onClick={()=>router.push('/')} className='navBtn'/>
-            <MenuIcon className='h-6 relative md:hidden cursor-pointer'/>
+            {/* <MenuIcon className='h-6 relative md:hidden cursor-pointer'/> */}
             {session ? (
               <>
               <div className='relative navBtn'>

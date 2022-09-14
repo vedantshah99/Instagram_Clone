@@ -20,7 +20,7 @@ function Chat({chat, messages}) {
             </title>
         </Head>
         <Header />
-        <Container >
+        <Container>
             <Sidebar />
             <ChatContainer>
                 <ChatScreen chat = {chat} messages = {messages}/>
@@ -64,13 +64,13 @@ export async function getServerSideProps(context){
 }
 
 const Container = styled.div`
-display: flex
+display: flex;
 `
 
 const ChatContainer = styled.div`
 flex: 1;
 overflow: scroll;
-height: 100vh
+height: 95vh
 /* ::webkit-scrollbar {
     display: none;
 }
