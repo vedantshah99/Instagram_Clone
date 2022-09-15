@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from '../../components/Header'
 import { useRouter} from 'next/router'
-import { query, orderBy,getDoc, getDocs,onSnapshot, addDoc, collection, doc} from '@firebase/firestore'
+import { query, orderBy,getDoc, getDocs,onSnapshot, addDoc, collection,where, doc} from '@firebase/firestore'
 import {db} from '../../firebase'
 import {useSession} from 'next-auth/react'
 import { useState , useEffect} from 'react'
@@ -12,8 +12,34 @@ import { Diversity1Sharp } from '@mui/icons-material'
 function profile({username, userPic}) {
     const router = useRouter()
     const id = router.query.userID
-    //const [userSnap, setUserSnap] = useState([])
+    const [userChats, setUserChats] = useState([])
+    const {data:session} = useSession()
+  
+  useEffect(() => onSnapshot(query(collection(db, 'chats'), where('users', 'array-contains', session?.user?.username)), snapshot=>{
+        setUserChats(snapshot.docs)
+      })
+  ,[db])
+
+  const createChat = async() =>{
     console.log(username)
+    const bool = chatAlreadyExists(username)
+    if (!bool) {
+      const q = query(collection(db, 'chats'))
+      await addDoc(collection(db, 'chats'), {
+        users:[session.user.username, username]
+      })
+    }
+    
+  }
+
+  const chatAlreadyExists = (recipientUser) =>{
+    return(
+      !!userChats.find(
+        (chat)=>
+          chat.data().users.find((user) => user === recipientUser)?.length > 0
+        )
+    )
+  }
 
   return (
     <div>
@@ -34,6 +60,7 @@ function profile({username, userPic}) {
                     <button 
                         className='bg-gray-100 font-bold text-sm rounded w-20 h-8'
                         type='button'
+                        onClick={createChat}
                     >
                         Message
                     </button>
