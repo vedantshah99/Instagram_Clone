@@ -91,7 +91,7 @@ function ChatScreen({chat, messages}) {
           ) : (
             <UserAvatar />
           )}
-
+ 
           <HeaderInformation>
             <h3>{recipientUser}</h3>
             {recipientSnapshot ? (
@@ -166,6 +166,9 @@ z-index: 100;
 top:0;
 display: flex;
 padding: 11px;
+height: 80px;
+align-items: center;
+border-bottom: 1 px solid whitesmoke;
 `
 
 const HeaderInformation = styled.div`
@@ -187,13 +190,16 @@ display: flex
 `
 
 const MessageContainer = styled.div`
+margin-top: 60px;
+overflow: scroll;
 padding: 30px;
 background-color: #e5ded8;
-min-height: 90vh;
+height: 100vh;
 `
 
 const EndOfMessage = styled.div`
-margin-bottom: 60px;
+margin-top: 40px;
+margin-bottom: 20px;
 `
 
 const UserAvatar = styled(Avatar)`

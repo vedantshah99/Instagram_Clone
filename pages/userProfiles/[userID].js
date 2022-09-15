@@ -8,6 +8,7 @@ import { useState , useEffect} from 'react'
 import styled from 'styled-components'
 import { useParams } from 'react-router-dom';
 import { Diversity1Sharp } from '@mui/icons-material'
+import { convertCompilerOptionsFromJson } from 'typescript'
 
 function profile({username, userPic}) {
     const router = useRouter()
@@ -21,7 +22,6 @@ function profile({username, userPic}) {
   ,[db])
 
   const createChat = async() =>{
-    console.log(username)
     const bool = chatAlreadyExists(username)
     if (!bool) {
       const q = query(collection(db, 'chats'))
@@ -29,7 +29,13 @@ function profile({username, userPic}) {
         users:[session.user.username, username]
       })
     }
-    
+
+    const curChat = userChats.find(
+        (chat)=>
+          chat.data().users.find((user) => user === username)
+    )
+    console.log(curChat.id)
+    router.push('/chat/'+curChat.id)
   }
 
   const chatAlreadyExists = (recipientUser) =>{
