@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Posts from './Posts'
 import MiniProfile from './MiniProfile'
 import Suggestions from './Suggestions'
-import { signIn,signOut,useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 
 function Feed() {
   const {data:session} = useSession()

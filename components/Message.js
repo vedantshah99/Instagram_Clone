@@ -26,6 +26,7 @@ export default Message
 const Container = styled.div``
 
 const MessageElement = styled.p`
+word-break: break-all;
 width: fit-content;
 padding: 15px;
 border-radius: 8px;

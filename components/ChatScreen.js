@@ -9,6 +9,7 @@ import {db} from '../firebase'
 import Message from './Message'
 import getRecipientUser from '../utility/getRecipientUser'
 import Moment from 'react-moment'
+import TimeAgo from 'timeago-react'
 
 function ChatScreen({chat, messages}) {
   const {data:session} = useSession()
@@ -80,6 +81,10 @@ function ChatScreen({chat, messages}) {
     scrollToBottom()
   }
 
+  useEffect(()=>{
+    scrollToBottom()
+  }, [])
+
   const recipient = recipientSnapshot?.docs?.[0]?.data()
   const recipientUser = getRecipientUser(chat.users,session?.user.username)
   
@@ -97,9 +102,7 @@ function ChatScreen({chat, messages}) {
             {recipientSnapshot ? (
               <p>Last Active: {' '}
               {recipient?.lastSeen.toDate() ? (
-                <Moment fromNow>
-                  datetime={recipient?.lastSeen?.toDate()}
-                </Moment>
+                <TimeAgo datetime={recipient?.lastSeen.toDate()} />
               ): 'Unavailable'}
               </p>
             ): (
@@ -190,11 +193,12 @@ display: flex
 `
 
 const MessageContainer = styled.div`
-margin-top: 60px;
+position: sticky;
+margin-top: 0px;
 overflow: scroll;
-padding: 30px;
+padding: 20px;
 background-color: #e5ded8;
-height: 100vh;
+height: 70vh;
 `
 
 const EndOfMessage = styled.div`
