@@ -80,6 +80,10 @@ function ChatScreen({chat, messages}) {
     scrollToBottom()
   }
 
+  useEffect(()=>{
+    scrollToBottom()
+  }, [])
+
   const recipient = recipientSnapshot?.docs?.[0]?.data()
   const recipientUser = getRecipientUser(chat.users,session?.user.username)
   
@@ -190,11 +194,12 @@ display: flex
 `
 
 const MessageContainer = styled.div`
-margin-top: 60px;
+position: sticky;
+margin-top: 0px;
 overflow: scroll;
-padding: 30px;
+padding: 20px;
 background-color: #e5ded8;
-height: 100vh;
+height: 70vh;
 `
 
 const EndOfMessage = styled.div`
