@@ -9,6 +9,7 @@ import {db} from '../firebase'
 import Message from './Message'
 import getRecipientUser from '../utility/getRecipientUser'
 import Moment from 'react-moment'
+import TimeAgo from 'timeago-react'
 
 function ChatScreen({chat, messages}) {
   const {data:session} = useSession()
@@ -101,9 +102,7 @@ function ChatScreen({chat, messages}) {
             {recipientSnapshot ? (
               <p>Last Active: {' '}
               {recipient?.lastSeen.toDate() ? (
-                <Moment fromNow>
-                  datetime={recipient?.lastSeen?.toDate()}
-                </Moment>
+                <TimeAgo datetime={recipient?.lastSeen.toDate()} />
               ): 'Unavailable'}
               </p>
             ): (
