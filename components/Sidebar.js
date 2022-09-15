@@ -73,10 +73,10 @@ export default Sidebar
 const Container = styled.div`
 flex: 0.45;
 border-right: 1 px solid whitesmoke;
-height: 100vh;
+height: 70vh;
 min-width: 300px;
 max-width: 350px;
-overflow-y: scroll;
+overflow: scroll;
 `
 
 const Search = styled.div`

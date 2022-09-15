@@ -13,7 +13,7 @@ function Chat({chat, messages}) {
     const {data:session} = useSession()
 
   return (
-    <>
+    <Main>
         <Head>
             <title>
                 Chat with {getRecipientUser(chat.users, session?.user?.username)}
@@ -26,7 +26,7 @@ function Chat({chat, messages}) {
                 <ChatScreen chat = {chat} messages = {messages}/>
             </ChatContainer>
         </Container>
-    </>
+    </Main>
   )
 }
 
@@ -63,14 +63,20 @@ export async function getServerSideProps(context){
     }
 }
 
+const Main = styled.div`
+//overflow: hidden;
+`
+
 const Container = styled.div`
 display: flex;
 `
 
 const ChatContainer = styled.div`
+overflow: hidden;
 flex: 1;
-overflow: scroll;
-height: 95vh
+height: 90vh;
+z-index: 1;
+
 /* ::webkit-scrollbar {
     display: none;
 }
