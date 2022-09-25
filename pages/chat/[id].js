@@ -32,8 +32,23 @@ function Chat({chat, messages}) {
 
 export default Chat
 
-export async function getServerSideProps(context){
-    const ref = doc(collection(db, 'chats'),context.query.id)
+export const getStaticPaths = async(context) => {
+    const chatsRef = await getDocs(collection(db, 'chats'))
+
+    const paths = chatsRef.docs.map((doc) => {
+        return {
+            params: {id: doc.id}
+        }
+    })
+
+    return {
+        paths,
+        fallback: false
+    }
+}
+
+export async function getStaticProps(context){
+    const ref = doc(collection(db, 'chats'),context.params.id)
 
     //Prep Messages on server
     const messagesRef = await
@@ -59,7 +74,8 @@ export async function getServerSideProps(context){
         props: {
             messages: JSON.stringify(messages),
             chat: chat
-        }
+        },
+        revalidate: 10,
     }
 }
 
