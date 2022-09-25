@@ -92,15 +92,31 @@ function profile({username, userPic}) {
 
 export default profile
 
-export async function getServerSideProps(context){
-    const userRef = doc(collection(db,'users'), String(context.query.userID))
+export const getStaticPaths = async(context) => {
+  const usersRef = await getDocs(collection(db, 'users'))
+
+  const paths = usersRef.docs.map((doc) => {
+      return {
+          params: {userID: doc.id}
+      }
+  })
+
+  return {
+      paths,
+      fallback: false
+  }
+}
+
+export async function getStaticProps(context){
+    const userRef = doc(collection(db,'users'), context.params.userID)
     const userSnap = await getDoc(userRef)
 
     return {
         props: {
             username: userSnap.data().username,
             userPic: userSnap.data().userPic,
-        }
+        },
+        revalidate: 10,
     }
 }
 

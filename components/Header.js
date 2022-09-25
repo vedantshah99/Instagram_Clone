@@ -16,6 +16,7 @@ function Header() {
   const [open, setOpen] = useRecoilState(modalState)
 
   useEffect(() => {
+    console.log('operation')
     if (session){
       setDoc(doc(db, 'users',session.user.uid),{
         username: session.user.username,
