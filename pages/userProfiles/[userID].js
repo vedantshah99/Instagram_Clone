@@ -115,7 +115,8 @@ export async function getStaticProps(context){
         props: {
             username: userSnap.data().username,
             userPic: userSnap.data().userPic,
-        }
+        },
+        revalidate: 10,
     }
 }
 

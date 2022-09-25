@@ -74,7 +74,8 @@ export async function getStaticProps(context){
         props: {
             messages: JSON.stringify(messages),
             chat: chat
-        }
+        },
+        revalidate: 10,
     }
 }
 
