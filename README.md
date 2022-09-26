@@ -1,4 +1,4 @@
-# Instagram Clone
+# Instagram Clone (Vedantstagram)
 
 Full stack web application built using React.js and Next.js that mimics the UI and social media features of Instagram.
 
