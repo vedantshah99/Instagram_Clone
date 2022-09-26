@@ -6,6 +6,7 @@ import {useSession} from 'next-auth/react'
 import {useRouter} from 'next/router'
 import { useState , useEffect} from 'react'
 import {db} from '../firebase'
+import Image from 'next/image'
 import { query, orderBy, where,snapshot, onSnapshot, collection} from '@firebase/firestore'
 
 function Chat({id, users}) {
@@ -32,7 +33,19 @@ function Chat({id, users}) {
         ) : (
           <UserAvatar />
         )}
-        <p>{recipientUser}</p>
+        {recipient?.blueCheck ? (
+          <div className='flex'>
+              <p>{recipientUser}</p>
+
+              <Image src = '/res/blueCheck.png'
+                  alt='balls'
+                  width='30%'
+                  height='30%'
+              />
+          </div>
+          ):(
+            <p>{recipientUser}</p>
+        )}
     </Container>
   )
 }

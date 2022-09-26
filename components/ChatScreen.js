@@ -10,6 +10,7 @@ import Message from './Message'
 import getRecipientUser from '../utility/getRecipientUser'
 import Moment from 'react-moment'
 import TimeAgo from 'timeago-react'
+import Image from 'next/image'
 
 function ChatScreen({chat, messages}) {
   const {data:session} = useSession()
@@ -98,7 +99,21 @@ function ChatScreen({chat, messages}) {
           )}
  
           <HeaderInformation>
-            <h3>{recipientUser}</h3>
+            {recipient?.blueCheck ? (
+              <div className='flex'>
+                  <h3>{recipientUser}</h3>
+
+                  <Image src = '/res/blueCheck.png'
+                      alt='balls'
+                      width='30%'
+                      height='30%'
+                  />
+              </div>
+              ):(
+                <h3>{recipientUser}</h3>
+            )}
+
+            {/* <h3>{recipientUser}</h3> */}
             {recipientSnapshot ? (
               <p>Last Active: {' '}
               {recipient?.lastSeen.toDate() ? (
