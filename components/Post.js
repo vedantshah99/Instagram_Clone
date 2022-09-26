@@ -10,10 +10,11 @@ import{
 import{HeartIcon as HeartIconFilled} 
 from "@heroicons/react/solid"
 import { useSession } from 'next-auth/react'
-import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, query, setDoc, doc, deleteDoc} from '@firebase/firestore'
+import { addDoc, collection, where, onSnapshot, orderBy, ref, serverTimestamp, query, setDoc, doc, deleteDoc} from '@firebase/firestore'
 import {db} from '../firebase'
 import Moment from 'react-moment'
 import {useRouter} from 'next/router'
+import Image from 'next/image'
 
 function Post({key,id,username,userImg, img, caption, userID}) {
     const {data:session} = useSession()
@@ -21,8 +22,17 @@ function Post({key,id,username,userImg, img, caption, userID}) {
     const [comments, setComments] = useState()
     const [likes, setLikes] = useState()
     const [hasLiked, setHasLiked] = useState(false)
+    const [influencerSnap, setInfluencerSnap] = useState()
     const router = useRouter()
 
+    //iRef = ref(db, 'users', id, 'blueCheck')
+    useEffect(() => onSnapshot(query(collection(db,'users'),where('username', '==',username)), snapshot => {
+        setInfluencerSnap(snapshot)
+      }), [db]
+    )
+
+    const influencer = influencerSnap?.docs?.[0]?.data()
+    console.log(influencer)
     useEffect(
         ()=> 
             onSnapshot(
@@ -80,7 +90,21 @@ function Post({key,id,username,userImg, img, caption, userID}) {
         {/* Post Header */}
         <div className='flex items-center p-5'>
             <img src={userImg} onClick={()=>router.push('/userProfiles/'+userID)} className='rounded-full h-12 w-12 border p-1 mr-3' alt=''/>
-            <p className='flex-1 font-bold'> {username}</p>
+            
+            {influencer?.blueCheck ? (
+                <div className='flex flex-1'>
+                    <p className=' font-bold'> {username} </p>
+
+                    <Image src = '/res/blueCheck.png'
+                        alt='balls'
+                        width='30%'
+                        height='30%'
+                    />
+                </div>
+            ): (
+                <p className='flex-1 font-bold'> {username}</p>
+            )}
+
             <DotsHorizontalIcon className='h-5' />
         </div>
         
