@@ -1,3 +1,5 @@
+# Instagram Clone
+
 Full stack web application built using React.js and Next.js that mimics the UI and social media features of Instagram.
 
 Implemented cloud database for storing user information through Firebase. Optimized performance through incremental static rendering of chats and user profiles
