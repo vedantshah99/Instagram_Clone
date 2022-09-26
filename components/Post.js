@@ -32,7 +32,7 @@ function Post({key,id,username,userImg, img, caption, userID}) {
     )
 
     const influencer = influencerSnap?.docs?.[0]?.data()
-    console.log(influencer)
+
     useEffect(
         ()=> 
             onSnapshot(

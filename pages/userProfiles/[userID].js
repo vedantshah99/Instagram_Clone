@@ -9,12 +9,22 @@ import styled from 'styled-components'
 import { useParams } from 'react-router-dom';
 import { Diversity1Sharp } from '@mui/icons-material'
 import { convertCompilerOptionsFromJson } from 'typescript'
+import Image from 'next/image'
 
 function profile({username, userPic}) {
     const router = useRouter()
     const id = router.query.userID
     const [userChats, setUserChats] = useState([])
     const {data:session} = useSession()
+    const [influencerSnap, setInfluencerSnap] = useState()
+
+    //iRef = ref(db, 'users', id, 'blueCheck')
+    useEffect(() => onSnapshot(query(collection(db,'users'),where('username', '==',username)), snapshot => {
+        setInfluencerSnap(snapshot)
+      }), [db]
+    )
+
+    const influencer = influencerSnap?.docs?.[0]?.data()
   
   useEffect(() => onSnapshot(query(collection(db, 'chats'), where('users', 'array-contains', session?.user?.username)), snapshot=>{
         setUserChats(snapshot.docs)
@@ -62,7 +72,22 @@ function profile({username, userPic}) {
             {/*Username*/}
             <div className='flex items-center justify-center flex-col col-span-2'>
                 <div className='container flex items-center'>
-                    <p className='text-2xl mr-4'> {username} </p>
+                    
+                    {influencer?.blueCheck ? (
+                        <div className='flex mr-4'>
+                            <p className='text-2xl mr-4'> {username} </p>
+
+                            <Image src = '/res/blueCheck.png'
+                                alt='balls'
+                                width='30%'
+                                height='30%'
+                            />
+                        </div>
+                    ): (
+                        <p className='text-2xl mr-4'> {username} </p>
+                    )}
+
+                    {/* <p className='text-2xl mr-4'> {username} </p> */}
                     <button 
                         className='bg-gray-100 font-bold text-sm rounded w-20 h-8'
                         type='button'
